@@ -1,0 +1,54 @@
+# Cart Service - Production Environment Configuration
+
+spring:
+  application:
+    name: cart-service
+
+  datasource:
+    url: jdbc:postgresql://cart-db:5434/cartdb
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+server:
+  port: 8084
+
+# API Key for authentication (Production - use environment variable)
+api:
+  key: ${CART_SERVICE_API_KEY:REPLACE_WITH_SECURE_API_KEY}
+
+# Logging configuration
+logging:
+  level:
+    com.farmatodo.cart_service: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{transactionId}] %-5level %logger{36} - %msg%n"
+  file:
+    name: /var/log/cart-service/application.log
+    max-size: 10MB
+    max-history: 30
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized

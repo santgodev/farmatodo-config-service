@@ -1,0 +1,55 @@
+# Token Service - Development Environment Configuration
+
+spring:
+  application:
+    name: token-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/tokendb
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+server:
+  port: 8082
+
+# API Key for authentication (Development)
+api:
+  key: token-service-dev-api-key
+
+# Encryption secret key (256-bit) - Development
+encryption:
+  secret:
+    key: DevSecretKey12345678901234567890
+
+# Token rejection probability (0.0 to 1.0)
+token:
+  rejectionProbability: 0.0
+
+# Logging configuration
+logging:
+  level:
+    com.farmatodo.token_service: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{transactionId}] %-5level %logger{36} - %msg%n"
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

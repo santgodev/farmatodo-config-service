@@ -1,0 +1,58 @@
+# Client Service - Production Environment Configuration
+
+spring:
+  application:
+    name: client-service
+
+  datasource:
+    url: jdbc:postgresql://client-db:5432/clientdb
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+server:
+  port: 8081
+
+# API Key for authentication (Production - use environment variable)
+api:
+  key: ${CLIENT_SERVICE_API_KEY:REPLACE_WITH_SECURE_API_KEY}
+
+# Product search configuration
+product:
+  minStock: 0  # Only return products with stock greater than this value
+
+# Logging configuration
+logging:
+  level:
+    com.farmatodo.client_service: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{transactionId}] %-5level %logger{36} - %msg%n"
+  file:
+    name: /var/log/client-service/application.log
+    max-size: 10MB
+    max-history: 30
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
